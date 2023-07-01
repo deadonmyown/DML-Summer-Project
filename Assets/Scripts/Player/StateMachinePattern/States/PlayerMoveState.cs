@@ -4,24 +4,34 @@ namespace Player.StateMachinePattern.States
 {
     public class PlayerMoveState : PlayerBaseState
     {
-        public PlayerMoveState(PlayerStateMachine stateMachine, Player player) : base(stateMachine, player)
+        public PlayerMoveState(PlayerStateMachine stateMachine, Player player, PlayerData playerData) : base(stateMachine, player, playerData)
         {
         }
 
         public override void Enter()
         {
+            Debug.Log("Enter Move State");
+            Player.JumpState.ResetAmountOfJumpsLeft();
         }
 
         public override void Tick()
         {
-            var inputX = _player.InputHandler.MovementInputX; 
+            var inputX = Player.InputHandler.MovementInputX; 
             
+            if (Player.InputHandler.JumpInput && Player.JumpState.CanJump() && Player.IsGrounded())
+            {
+                StateMachine.SwitchState(Player.JumpState);
+            }
+            else if (!Player.IsGrounded())
+            {
+                StateMachine.SwitchState(Player.FallState);
+            }
             if (inputX == 0)
             {
-                _stateMachine.SwitchState(_player.MoveState);
+                StateMachine.SwitchState(Player.IdleState);
             }
 
-            _player.Move(_player.MoveSpeed * inputX);
+            Player.Move(PlayerData.moveSpeed * inputX);
         }
 
         public override void Exit()

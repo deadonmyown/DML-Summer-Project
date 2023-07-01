@@ -2,6 +2,7 @@
 using Player.StateMachinePattern;
 using Player.StateMachinePattern.States;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Player
 {
@@ -13,14 +14,18 @@ namespace Player
         public PlayerStateMachine StateMachine { get; private set; }
         public PlayerIdleState IdleState { get; private set; }
         public PlayerMoveState MoveState { get; private set; }
+        public PlayerJumpState JumpState { get; private set; }
+        public PlayerFallState FallState { get; private set; }
         
         public PlayerInputHandler InputHandler { get; private set; }
         public Animator PlayerAnimator { get; private set; }
         public Rigidbody2D PlayerRB2D { get; private set; }
-        
-        //TODO: Better to make it in another script
-        public float MoveSpeed;
-        //
+
+        [SerializeField] private PlayerData playerData;
+
+        [SerializeField] private Transform groundCheckPosition;
+        [SerializeField] private float groundCheckRadius;
+        [SerializeField] private LayerMask groundCheckMask;
 
         private void Awake()
         {
@@ -30,8 +35,10 @@ namespace Player
             
             StateMachine = new PlayerStateMachine();
 
-            IdleState = new PlayerIdleState(StateMachine, this);
-            MoveState = new PlayerMoveState(StateMachine, this);
+            IdleState = new PlayerIdleState(StateMachine, this, playerData);
+            MoveState = new PlayerMoveState(StateMachine, this, playerData);
+            JumpState = new PlayerJumpState(StateMachine, this, playerData);
+            FallState = new PlayerFallState(StateMachine, this, playerData);
         }
 
         private void Start()
@@ -47,6 +54,21 @@ namespace Player
         public void Move(float velocity)
         {
             PlayerRB2D.velocity = new Vector2(velocity, PlayerRB2D.velocity.y);
+        }
+
+        public void StopMove()
+        {
+            PlayerRB2D.velocity = Vector2.zero;
+        }
+
+        public void Jump(float jumpForce)
+        {
+            PlayerRB2D.velocity = new Vector2(PlayerRB2D.velocity.y, jumpForce);
+        }
+
+        public bool IsGrounded()
+        {
+            return Physics2D.OverlapCircle(groundCheckPosition.position, groundCheckRadius, groundCheckMask);
         }
     }
 }
