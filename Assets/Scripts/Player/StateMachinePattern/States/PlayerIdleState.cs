@@ -4,6 +4,8 @@ namespace Player.StateMachinePattern.States
 {
     public class PlayerIdleState : PlayerBaseState
     {
+        private readonly int IdleHash = Animator.StringToHash("Idle");
+        
         public PlayerIdleState(PlayerStateMachine stateMachine, Player player, PlayerData playerData) : base(stateMachine, player, playerData)
         {
         }
@@ -11,22 +13,37 @@ namespace Player.StateMachinePattern.States
         public override void Enter()
         {
             Debug.Log("Enter Idle State");
-            Player.StopMove();
+            
+            Player.ChangePhysicMaterial(Player.DefaultMaterial);
+            
+            //Player.ResetVelocity();
             Player.JumpState.ResetAmountOfJumpsLeft();
-            //TODO: Animation
+
+            Player.PlayerAnimator.SetBool(IdleHash, true);
         }
 
         public override void Tick()
         {
+            var inputX = Player.InputHandler.MovementInputX;
+            var inputY = Player.InputHandler.MovementInputY;
+            var velocity = Player.Velocity.y;
+            
             if (Player.InputHandler.JumpInput && Player.JumpState.CanJump() && Player.IsGrounded())
             {
                 StateMachine.SwitchState(Player.JumpState);
             }
             else if (!Player.IsGrounded())
             {
-                StateMachine.SwitchState(Player.FallState);
+                if (velocity > 0f)
+                {
+                    StateMachine.SwitchState(Player.InAirUpState);
+                }
+                else
+                {
+                    StateMachine.SwitchState(Player.InAirFallState);
+                }
             }
-            else if (Player.InputHandler.MovementInputX != 0)
+            else if (inputX != 0 || inputY != 0)
             {
                 StateMachine.SwitchState(Player.MoveState);
             }
@@ -34,7 +51,7 @@ namespace Player.StateMachinePattern.States
 
         public override void Exit()
         {
-            //TODO: Animation
+            Player.PlayerAnimator.SetBool(IdleHash, false);
         }
     }
 }

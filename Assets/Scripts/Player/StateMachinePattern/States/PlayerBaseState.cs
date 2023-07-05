@@ -20,7 +20,5 @@ namespace Player.StateMachinePattern.States
         {
             StartTime = Time.time;
         }
-
-        //TODO: Basic Methods for player
     }
 }

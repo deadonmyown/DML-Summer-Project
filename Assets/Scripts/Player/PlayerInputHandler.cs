@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,7 +15,7 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField] private float inputHoldTime = 0.15f;
     private float jumpInputStartTime;
 
-    void Update()
+    private void Update()
     {
         CheckJumpInputHoldTime();
     }
@@ -49,5 +50,13 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (Time.time >= jumpInputStartTime + inputHoldTime)
             JumpInput = false;
+    }
+
+    public void OnPlayerSwitch(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            PlayerManager.Instance.SwitchPlayer();
+        }
     }
 }

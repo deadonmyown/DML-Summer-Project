@@ -4,6 +4,7 @@ namespace Player.StateMachinePattern.States
 {
     public class PlayerJumpState : PlayerBaseState
     {
+        private readonly int JumpHash = Animator.StringToHash("Jump");
         private int _amountOfJumpsLeft;
         
         public PlayerJumpState(PlayerStateMachine stateMachine, Player player, PlayerData playerData) : base(stateMachine, player, playerData)
@@ -14,28 +15,37 @@ namespace Player.StateMachinePattern.States
         public override void Enter()
         {
             Debug.Log("Enter Jump State");
-            Player.Jump(PlayerData.jumpForce);
+            
+            Player.ChangePhysicMaterial(Player.SlipperMaterial);
+            
+            Player.SetVelocityY(PlayerData.jumpForce);
             _amountOfJumpsLeft--;
+
+            Player.PlayerAnimator.SetBool(JumpHash, true);
         }
 
         public override void Tick()
         {
             CheckJumpMultiplier();
+            CheckEndJumpInput();
             
-            var velocity = Player.PlayerRB2D.velocity.y;
+            var velocity = Player.Velocity.y;
 
             var inputX = Player.InputHandler.MovementInputX;
+            var inputY = Player.InputHandler.MovementInputY;
             
             if (velocity <= 0f)
             {
                 StateMachine.SwitchState(Player.FallState);
             }
             
-            Player.Move(PlayerData.moveSpeed * inputX);
+            Player.SetVelocityXZRaw(inputX, inputY, PlayerData.jumpMoveSpeed);
+            Player.CheckFlip(inputX);
         }
 
         public override void Exit()
         {
+            Player.PlayerAnimator.SetBool(JumpHash, false);
         }
         
         public bool CanJump() => _amountOfJumpsLeft > 0 ? true : false;
@@ -48,7 +58,15 @@ namespace Player.StateMachinePattern.States
         {
             if (Player.InputHandler.JumpInputStop)
             {
-                Player.Jump(Player.PlayerRB2D.velocity.y * PlayerData.jumpMultiplier);
+                Player.SetVelocityY(Player.Velocity.y * PlayerData.jumpMultiplier);
+            }
+        }
+
+        private void CheckEndJumpInput()
+        {
+            if (!Player.InputHandler.JumpInput)
+            {
+                Player.SetVelocityY(Player.Velocity.y * PlayerData.softJumpMultiplier);
             }
         }
     }
