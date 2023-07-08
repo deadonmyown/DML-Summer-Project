@@ -1,10 +1,7 @@
-﻿using System;
-using Player.StateMachinePattern;
+﻿using Player.StateMachinePattern;
 using Player.StateMachinePattern.States;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Serialization;
 
 namespace Player
 {
@@ -24,6 +21,7 @@ namespace Player
         public PlayerInputHandler InputHandler { get; private set; }
         public Animator PlayerAnimator { get; private set; }
         public Rigidbody PlayerRB { get; private set; }
+        public Interactor Interactor { get; private set; }
         public Vector3 Velocity { get; private set; }
 
         private Vector3 _temporaryVelocity;
@@ -51,6 +49,7 @@ namespace Player
             InputHandler = GetComponent<PlayerInputHandler>();
             PlayerAnimator = GetComponent<Animator>();
             PlayerRB = GetComponent<Rigidbody>();
+            Interactor = GetComponent<Interactor>();
 
             StateMachine = new PlayerStateMachine();
 
@@ -74,6 +73,10 @@ namespace Player
         {
             Velocity = PlayerRB.velocity;
             StateMachine.CurrentState?.Tick();
+            if (InputHandler.IsInteract)
+            {
+                Interactor.TryInteract();
+            }
         }
 
         public void ChangePhysicMaterial(PhysicMaterial physicMaterial)

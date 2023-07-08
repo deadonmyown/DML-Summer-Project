@@ -14,7 +14,7 @@ namespace Player.StateMachinePattern.States
         public override void Enter()
         {
             base.Enter();
-            Debug.Log("Enter In Air FALL State");
+            //Debug.Log("Enter In Air FALL State");
             
             coyoteTime = true;
             
@@ -54,7 +54,7 @@ namespace Player.StateMachinePattern.States
         {
             if (Time.time > StartTime + PlayerData.coyoteTime)
             {
-                Debug.Log("Coyote time left");
+                //Debug.Log("Coyote time left");
                 coyoteTime = false;
                 Player.JumpState.DecreaseAmountOfJumpsLeft();
             }

@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3869580774488273009
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4429627102049026926}
+  m_Layer: 7
+  m_Name: InteractorCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4429627102049026926
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3869580774488273009}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6845225434973198568}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4188300784350823666
 GameObject:
   m_ObjectHideFlags: 0
@@ -12,7 +43,7 @@ GameObject:
   - component: {fileID: 1730535915263192180}
   m_Layer: 7
   m_Name: Mesh
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,10 +131,11 @@ GameObject:
   - component: {fileID: 2235322777375832287}
   - component: {fileID: 803594834993283775}
   - component: {fileID: 5986428809211389891}
+  - component: {fileID: 7819422318065439997}
   - component: {fileID: 7647982403210810578}
   m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -123,6 +155,7 @@ Transform:
   - {fileID: 519737360691608957}
   - {fileID: 6106435575297228178}
   - {fileID: 6781528908285455525}
+  - {fileID: 4429627102049026926}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -165,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c44d031da31af946990294d82521daa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputHoldTime: 0.15
+  jumpInputHoldTime: 0.4
 --- !u!95 &2235322777375832287
 Animator:
   serializedVersion: 5
@@ -256,11 +289,34 @@ MonoBehaviour:
   groundCheckRadius: 0.4
   groundCheckMask:
     serializedVersion: 2
-    m_Bits: 320
+    m_Bits: 832
   playerSprite: {fileID: 0}
   playerCollider: {fileID: 1730535915263192180}
   defaultMaterial: {fileID: 13400000, guid: 509f31f7d6c44484580d0d984b45e7da, type: 2}
   slipperMaterial: {fileID: 13400000, guid: 576259743ef79ff40bf1d1ab6c317eb1, type: 2}
+--- !u!114 &7819422318065439997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8670333900431808308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f85c1440e0dad2c4e90b9399433aa0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactedColliders:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  interactorCheck: {fileID: 4429627102049026926}
+  interactorCheckRadius: 1
+  interactorMask:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!114 &7647982403210810578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,6 +390,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 898611c8-174c-447b-a278-75c1e7b62b26
     m_ActionName: Main/SwitchPlayer[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5256505025798983644}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnInteract
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 8687c686-ad25-4258-bec6-00f6cb7614b6
+    m_ActionName: Main/Interact[/Keyboard/e]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard and Mouse
   m_DefaultActionMap: Main

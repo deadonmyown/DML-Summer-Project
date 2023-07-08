@@ -1,29 +1,87 @@
 using System.Collections;
-using System.Collections.Generic;
+using Environment.Interactable;
 using UnityEngine;
 
-public class RotatableObject : MonoBehaviour
+public class RotatableObject : Changeable
 {
+    [SerializeField] private bool rotateAtStart;
     [SerializeField] private Vector3 targetRotation;
     [SerializeField] private float rotationDuration;
     [SerializeField] private AnimationCurve animCurve;
-    private bool _isObjectRotated = false;
-    private Quaternion _initialRotation;
+    [SerializeField] private bool rotateBack;
+    [SerializeField] private Vector3 currentRotation;
+    [SerializeField] private float pauseDuration;
+    [SerializeField] private bool isLoop;
+    
+    public override bool IsChangingReadonly { get => isLoop || IsChanging;}
+
+    public Vector3 CurrentRotation => currentRotation;
 
     private void Start()
     {
-        _initialRotation = transform.rotation;
-        StartRotating();
+        transform.eulerAngles = currentRotation;
+        if (rotateAtStart)
+            ChangeWith();
     }
 
-    public void StartRotating()
+    public override void Change()
     {
-        var startRotation = transform.rotation;
-        StartCoroutine(Rotate(startRotation, Quaternion.Euler(targetRotation)));
+        
+    }
+    
+    public override void ChangeWith(Button interactable = null)
+    {
+        /*var startRotation = transform.rotation;
+        var endVector = targetRotation;
+        if (interactable && interactable.useCustomRotation)
+        {
+            endVector = interactable.customRotation;
+        }
+        
+        SetupRotation(startRotation, endVector, interactable);*/
+        StartCoroutine(BaseSetup(interactable));
     }
 
-    private IEnumerator Rotate(Quaternion startRotation, Quaternion endRotation)
+    /*private void SetupRotation(Quaternion startRotation, Vector3 endVector, Button interactable = null)
     {
+        //Debug.Log(endVector);
+        //Debug.Log($"before {currentRotation}");
+        currentRotation += endVector;
+        currentRotation.Set(currentRotation.x % 360, currentRotation.y % 360, currentRotation.z % 360);
+        //Debug.Log($"after {currentRotation}");
+        var endRotation = Quaternion.Euler(currentRotation);
+        //Debug.Log($"finish strange result {endRotation.eulerAngles}");
+        StartCoroutine(Rotate(startRotation, endRotation, interactable));
+    }*/
+
+    private IEnumerator BaseSetup(Button interactable = null)
+    {
+        while (true)
+        {
+            var startRotation = transform.rotation;
+            var endVector = targetRotation;
+            if (interactable && interactable.useCustomRotation)
+            {
+                endVector = interactable.customRotation;
+            }
+
+            currentRotation += endVector;
+            currentRotation.Set(currentRotation.x % 360, currentRotation.y % 360, currentRotation.z % 360);
+            var endRotation = Quaternion.Euler(currentRotation);
+            yield return Rotate(startRotation, endRotation, interactable);
+
+            yield return new WaitForSeconds(pauseDuration);
+            
+            if (!isLoop)
+            {
+                yield break;
+            }
+        }
+    }
+    
+    private IEnumerator Rotate(Quaternion startRotation, Quaternion endRotation, Button interactable = null)
+    {
+        IsChanging = true;
         float timeElapsed = 0;
 
         while (timeElapsed < rotationDuration)
@@ -39,9 +97,18 @@ public class RotatableObject : MonoBehaviour
         }
 
         transform.rotation = endRotation;
-        _isObjectRotated = true;
-        targetRotation += targetRotation;
+        if (rotateBack)
+        {
+            if (interactable && interactable.useCustomRotation)
+            {
+                interactable.customRotation = -interactable.customRotation;
+            }
+            else
+            {
+                targetRotation = -targetRotation;
+            }
+        }
+
+        IsChanging = false;
     }
-    
-    public void ResetRotationInfo() => _isObjectRotated = false;
 }

@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -77,6 +74,7 @@ namespace Player
         {
             var player = CurrentPlayer.transform;
             activeCamera.Follow = player;
+            activeCamera.LookAt = player;
         }
     }
 }

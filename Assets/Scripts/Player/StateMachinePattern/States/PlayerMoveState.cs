@@ -12,7 +12,7 @@ namespace Player.StateMachinePattern.States
 
         public override void Enter()
         {
-            Debug.Log("Enter Move State");
+            //Debug.Log("Enter Move State");
             
             Player.ChangePhysicMaterial(Player.DefaultMaterial);
             

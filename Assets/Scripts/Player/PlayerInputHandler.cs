@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,9 +9,10 @@ public class PlayerInputHandler : MonoBehaviour
     public int MovementInputY { get; private set; }
     public bool JumpInput { get; private set; }
     public bool JumpInputStop { get; private set; }
+    public bool IsInteract { get; private set; }
 
-    [SerializeField] private float inputHoldTime = 0.15f;
-    private float jumpInputStartTime;
+    [SerializeField] private float jumpInputHoldTime = 0.4f;
+    private float _jumpInputStartTime;
 
     private void Update()
     {
@@ -34,11 +33,11 @@ public class PlayerInputHandler : MonoBehaviour
         {
             JumpInput = true;
             JumpInputStop = false;
-            jumpInputStartTime = Time.time;
+            _jumpInputStartTime = Time.time;
         }
         else if (context.canceled)
         {
-            Debug.Log("Jump stop");
+            //Debug.Log("Jump stop");
             JumpInput = false;
             JumpInputStop = true;
         }
@@ -48,7 +47,7 @@ public class PlayerInputHandler : MonoBehaviour
     
     private void CheckJumpInputHoldTime()
     {
-        if (Time.time >= jumpInputStartTime + inputHoldTime)
+        if (Time.time >= _jumpInputStartTime + jumpInputHoldTime)
             JumpInput = false;
     }
 
@@ -57,6 +56,20 @@ public class PlayerInputHandler : MonoBehaviour
         if (context.performed)
         {
             PlayerManager.Instance.SwitchPlayer();
+        }
+    }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            //Debug.Log("Start Interaction");
+            IsInteract = true;
+        }
+        else if (context.canceled)
+        {
+            //Debug.Log("End Interaction");
+            IsInteract = false;
         }
     }
 }

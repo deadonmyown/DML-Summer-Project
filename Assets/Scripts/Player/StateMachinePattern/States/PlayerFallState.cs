@@ -12,7 +12,7 @@ namespace Player.StateMachinePattern.States
 
         public override void Enter()
         {
-            Debug.Log("Enter Fall State");
+            //Debug.Log("Enter Fall State");
             
             Player.ChangePhysicMaterial(Player.SlipperMaterial);
             

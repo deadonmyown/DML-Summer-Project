@@ -12,7 +12,7 @@ namespace Player.StateMachinePattern.States
 
         public override void Enter()
         {
-            Debug.Log("Enter Idle State");
+            //Debug.Log("Enter Idle State");
             
             Player.ChangePhysicMaterial(Player.DefaultMaterial);
             

@@ -14,7 +14,7 @@ namespace Player.StateMachinePattern.States
 
         public override void Enter()
         {
-            Debug.Log("Enter Jump State");
+            //Debug.Log("Enter Jump State");
             
             Player.ChangePhysicMaterial(Player.SlipperMaterial);
             
