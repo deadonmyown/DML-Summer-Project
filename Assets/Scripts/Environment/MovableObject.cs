@@ -1,23 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Environment.Interactable;
+using Player;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class MovableObject : Changeable
 {
     [SerializeField] private bool moveAtStart;
-    [SerializeField] private Vector3 targetPosition;
-    [SerializeField] private float moveDuration;
-    [SerializeField] private AnimationCurve animCurve;
     [SerializeField] private bool moveBack;
-    [SerializeField] private float pauseDuration;
     [SerializeField] private bool isLoop;
-
-    public override bool IsChangingReadonly { get => isLoop || IsChanging; }
-
+    private Vector3 _currentPosition;
+    [SerializeField] private Vector3 targetPosition;
+    [SerializeField] private AnimationCurve animCurve;
+    [SerializeField] private float moveDuration;
+    [SerializeField] private float pauseDuration;
+    
+    public Vector3 CurrentPosition => _currentPosition;
+    
     private void Start()
     {
+        _currentPosition = transform.localPosition;
+        
         if (moveAtStart)
             ChangeWith();
     }
@@ -25,12 +30,12 @@ public class MovableObject : Changeable
 
     public override void Change()
     {
-        
+        StartCoroutine(BaseSetup());
     }
     
     public override void ChangeWith(Button interactable = null)
     {
-        /*var startPosition = transform.position;
+        /*var startPosition = transform.localPosition;
         var addPosition = targetPosition;
         if (interactable && interactable.useCustomPosition)
         {
@@ -43,25 +48,22 @@ public class MovableObject : Changeable
 
     private IEnumerator BaseSetup(Button interactable = null)
     {
-        while (true)
+        do
         {
-            var startPosition = transform.position;
+            var startPosition = transform.localPosition;
             var addPosition = targetPosition;
             if (interactable && interactable.useCustomPosition)
             {
                 addPosition = interactable.customPosition;
             }
-        
+
             var endPosition = startPosition + addPosition;
+            _currentPosition = endPosition;
             yield return Move(startPosition, endPosition, interactable);
-            
+
             yield return new WaitForSeconds(pauseDuration);
             
-            if (!isLoop)
-            {
-                yield break;
-            }
-        }
+        } while (isLoop);
     }
 
     /*private IEnumerator SetupMovement(Vector3 startPosition, Vector3 addPosition, Button interactable = null)
@@ -81,13 +83,13 @@ public class MovableObject : Changeable
 
             t = animCurve.Evaluate(t);
 
-            transform.position = Vector3.Lerp(startPosition, endPosition, t);
-            timeElapsed += Time.deltaTime;
+            transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
+            timeElapsed += Time.fixedDeltaTime;
 
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
 
-        transform.position = endPosition;
+        transform.localPosition = endPosition;
         if (moveBack)
         {
             if (interactable && interactable.useCustomPosition)
@@ -100,6 +102,24 @@ public class MovableObject : Changeable
             }
         }
 
-        IsChanging = false;
+        IsChanging = isLoop;
+    }
+
+    public void TurnLoop(bool loop) => isLoop = loop;
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("PlayerMesh"))
+        {
+            other.gameObject.transform.parent.parent = transform;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("PlayerMesh"))
+        {
+            other.gameObject.transform.parent.parent = PlayerManager.Instance.transform;
+        }
     }
 }

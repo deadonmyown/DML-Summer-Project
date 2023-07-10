@@ -37,6 +37,7 @@ namespace Player
 
         [SerializeField] private SpriteRenderer playerSprite;
         [SerializeField] private Collider playerCollider;
+        [SerializeField] private Collider playerHeadCollider;
 
         [SerializeField] private PhysicMaterial defaultMaterial;
         [SerializeField] private PhysicMaterial slipperMaterial;
@@ -82,6 +83,7 @@ namespace Player
         public void ChangePhysicMaterial(PhysicMaterial physicMaterial)
         {
             playerCollider.material = physicMaterial;
+            playerHeadCollider.material = physicMaterial;
         }
         
         public void SetVelocityXZ(Vector2 input, float speed)

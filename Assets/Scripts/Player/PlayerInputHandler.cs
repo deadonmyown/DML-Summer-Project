@@ -1,9 +1,13 @@
 using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
+using UnityEngine.SceneManagement;
 
 public class PlayerInputHandler : MonoBehaviour
 {
+    //public static event Action onInteract;
+    
     public Vector2 RawMovementInput { get; private set; }
     public int MovementInputX { get; private set; }
     public int MovementInputY { get; private set; }
@@ -70,6 +74,14 @@ public class PlayerInputHandler : MonoBehaviour
         {
             //Debug.Log("End Interaction");
             IsInteract = false;
+        }
+    }
+
+    public void OnRestart(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }

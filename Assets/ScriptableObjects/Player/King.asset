@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: King
   m_EditorClassIdentifier: 
   moveSpeed: 5.5
-  jumpForce: 7
+  jumpForce: 7.5
   amountOfJumps: 1
   coyoteTime: 0.4
   jumpMultiplier: 0.4

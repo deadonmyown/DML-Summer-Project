@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Interactor : MonoBehaviour
@@ -10,8 +11,6 @@ public class Interactor : MonoBehaviour
     [SerializeField] private Transform interactorCheck;
     [SerializeField] private float interactorCheckRadius = 0.8f;
     [SerializeField] private LayerMask interactorMask;
-
-
 
     public void TryInteract()
     {

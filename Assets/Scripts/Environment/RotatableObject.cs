@@ -5,15 +5,13 @@ using UnityEngine;
 public class RotatableObject : Changeable
 {
     [SerializeField] private bool rotateAtStart;
-    [SerializeField] private Vector3 targetRotation;
-    [SerializeField] private float rotationDuration;
-    [SerializeField] private AnimationCurve animCurve;
     [SerializeField] private bool rotateBack;
-    [SerializeField] private Vector3 currentRotation;
-    [SerializeField] private float pauseDuration;
     [SerializeField] private bool isLoop;
-    
-    public override bool IsChangingReadonly { get => isLoop || IsChanging;}
+    [SerializeField] private Vector3 currentRotation;
+    [SerializeField] private Vector3 targetRotation;
+    [SerializeField] private AnimationCurve animCurve;
+    [SerializeField] private float rotationDuration;
+    [SerializeField] private float pauseDuration;
 
     public Vector3 CurrentRotation => currentRotation;
 
@@ -26,7 +24,7 @@ public class RotatableObject : Changeable
 
     public override void Change()
     {
-        
+        StartCoroutine(BaseSetup());
     }
     
     public override void ChangeWith(Button interactable = null)
@@ -56,7 +54,7 @@ public class RotatableObject : Changeable
 
     private IEnumerator BaseSetup(Button interactable = null)
     {
-        while (true)
+        do
         {
             var startRotation = transform.rotation;
             var endVector = targetRotation;
@@ -72,13 +70,9 @@ public class RotatableObject : Changeable
 
             yield return new WaitForSeconds(pauseDuration);
             
-            if (!isLoop)
-            {
-                yield break;
-            }
-        }
+        } while (isLoop);
     }
-    
+
     private IEnumerator Rotate(Quaternion startRotation, Quaternion endRotation, Button interactable = null)
     {
         IsChanging = true;
@@ -109,6 +103,8 @@ public class RotatableObject : Changeable
             }
         }
 
-        IsChanging = false;
+        IsChanging = isLoop;
     }
+    
+    public void TurnLoop(bool loop) => isLoop = loop;
 }

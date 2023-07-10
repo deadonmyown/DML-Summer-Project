@@ -1,3 +1,4 @@
+using Environment;
 using Environment.Interactable;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -11,6 +12,7 @@ public class Button : MonoBehaviour, IInteractable
     [HideInInspector] public bool useCustomPosition;
     [HideInInspector] public Vector3 customPosition;
     [SerializeReference] private ChangeableHandler[] changeableHandlers;
+    [SerializeField] private PuzzleHandler puzzleHandler;
     private int _changeableHandlersCount;
 
     private void Start()
@@ -28,6 +30,11 @@ public class Button : MonoBehaviour, IInteractable
             for (int i = 0; i < _changeableHandlersCount; i++)
             {
                 changeableHandlers[i].ChangeWith(this);
+            }
+
+            if (puzzleHandler)
+            {
+                puzzleHandler.TryPuzzleInvoke();
             }
 
             return true;

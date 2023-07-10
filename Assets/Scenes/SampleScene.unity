@@ -154,8 +154,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateAtStart: 0
+  rotateBack: 1
+  isLoop: 0
+  currentRotation: {x: 0, y: 0, z: 0}
   targetRotation: {x: 0, y: 0, z: 90}
-  rotationDuration: 2
   animCurve:
     serializedVersion: 2
     m_Curve:
@@ -180,10 +182,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotateBack: 1
-  currentRotation: {x: 0, y: 0, z: 0}
+  rotationDuration: 2
   pauseDuration: 0
-  isLoop: 0
 --- !u!4 &58595073
 Transform:
   m_ObjectHideFlags: 0
@@ -256,7 +256,7 @@ MonoBehaviour:
   changeableHandlers:
   - {fileID: 399808306}
   - {fileID: 718119450}
-  - {fileID: 514742731}
+  puzzleHandler: {fileID: 992736574}
 --- !u!65 &106350882
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -503,6 +503,7 @@ GameObject:
   - component: {fileID: 216922139}
   - component: {fileID: 216922138}
   - component: {fileID: 216922137}
+  - component: {fileID: 216922140}
   m_Layer: 0
   m_Name: PointLight
   m_TagString: Untagged
@@ -584,7 +585,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 1
+  m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -610,6 +611,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &216922140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216922136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90bd5b9dd02741bbb09e869c7dbe4932, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorDuration: 2
 --- !u!1 &293799208
 GameObject:
   m_ObjectHideFlags: 0
@@ -827,8 +841,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateAtStart: 0
+  rotateBack: 0
+  isLoop: 0
+  currentRotation: {x: 0, y: 0, z: 0}
   targetRotation: {x: 90, y: 0, z: 0}
-  rotationDuration: 3
   animCurve:
     serializedVersion: 2
     m_Curve:
@@ -853,10 +869,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotateBack: 0
-  currentRotation: {x: 0, y: 0, z: 0}
+  rotationDuration: 3
   pauseDuration: 0
-  isLoop: 0
 --- !u!54 &399808301
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -998,8 +1012,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveAtStart: 0
+  moveBack: 1
+  isLoop: 0
   targetPosition: {x: -5, y: 0, z: 0}
-  moveDuration: 2
   animCurve:
     serializedVersion: 2
     m_Curve:
@@ -1024,9 +1039,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  moveBack: 1
+  moveDuration: 2
   pauseDuration: 0
-  isLoop: 0
 --- !u!1 &413591441
 GameObject:
   m_ObjectHideFlags: 0
@@ -1503,8 +1517,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateAtStart: 1
+  rotateBack: 1
+  isLoop: 0
+  currentRotation: {x: 0, y: 0, z: 0}
   targetRotation: {x: 90, y: 0, z: 0}
-  rotationDuration: 3
   animCurve:
     serializedVersion: 2
     m_Curve:
@@ -1529,10 +1545,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotateBack: 1
-  currentRotation: {x: 0, y: 0, z: 0}
+  rotationDuration: 3
   pauseDuration: 0
-  isLoop: 1
 --- !u!114 &514742731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1750,7 +1764,7 @@ PrefabInstance:
     - target: {fileID: 1436968600749768932, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
       propertyPath: m_Material
       value: 
-      objectReference: {fileID: 13400000, guid: 576259743ef79ff40bf1d1ab6c317eb1, type: 2}
+      objectReference: {fileID: 13400000, guid: 509f31f7d6c44484580d0d984b45e7da, type: 2}
     - target: {fileID: 1730535915263192180, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
       propertyPath: m_Material
       value: 
@@ -1905,6 +1919,7 @@ MonoBehaviour:
   customPosition: {x: 0, y: 0, z: 0}
   changeableHandlers:
   - {fileID: 58595074}
+  puzzleHandler: {fileID: 0}
 --- !u!65 &566746212
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2243,8 +2258,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateAtStart: 1
+  rotateBack: 0
+  isLoop: 0
+  currentRotation: {x: 0, y: 0, z: 0}
   targetRotation: {x: 90, y: 0, z: 0}
-  rotationDuration: 3
   animCurve:
     serializedVersion: 2
     m_Curve:
@@ -2269,10 +2286,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotateBack: 0
-  currentRotation: {x: 0, y: 0, z: 0}
+  rotationDuration: 3
   pauseDuration: 0
-  isLoop: 0
 --- !u!54 &718119445
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2580,6 +2595,111 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &992736573
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 992736575}
+  - component: {fileID: 992736574}
+  m_Layer: 0
+  m_Name: puzzleHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &992736574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992736573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9409b9d9095412ab4aa0f801525fab8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetObjects:
+  - {fileID: 399808300}
+  targetRotation: {x: 90, y: 0, z: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
+  customData:
+    newColor: {r: 0.28773582, g: 1, b: 0.39433998, a: 0}
+    backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  onPuzzleSuccess:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 514742730}
+        m_TargetAssemblyTypeName: RotatableObject, Assembly-CSharp
+        m_MethodName: TurnLoop
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 100
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 514742730}
+        m_TargetAssemblyTypeName: RotatableObject, Assembly-CSharp
+        m_MethodName: Change
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 100
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onCustomPuzzleSuccess:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 216922140}
+        m_TargetAssemblyTypeName: Environment.LightHandler, Assembly-CSharp
+        m_MethodName: SetColor
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 216922138}
+        m_TargetAssemblyTypeName: UnityEngine.Light, UnityEngine
+        m_MethodName: set_intensity
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 50
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!4 &992736575
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992736573}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 28
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &993098625
 GameObject:
   m_ObjectHideFlags: 0
@@ -2820,7 +2940,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1096829109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3023,8 +3143,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateAtStart: 1
+  rotateBack: 0
+  isLoop: 0
+  currentRotation: {x: 0, y: 0, z: 0}
   targetRotation: {x: 0, y: 0, z: 90}
-  rotationDuration: 3
   animCurve:
     serializedVersion: 2
     m_Curve:
@@ -3049,10 +3171,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotateBack: 0
-  currentRotation: {x: 0, y: 0, z: 0}
+  rotationDuration: 3
   pauseDuration: 0
-  isLoop: 0
 --- !u!1 &1161908276
 GameObject:
   m_ObjectHideFlags: 0
@@ -3539,6 +3659,7 @@ MonoBehaviour:
   customPosition: {x: 0, y: 0, z: 0}
   changeableHandlers:
   - {fileID: 58595074}
+  puzzleHandler: {fileID: 0}
 --- !u!65 &1708292061
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3759,14 +3880,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useStartCustomGravity: 0
   customGravity: {x: 0, y: -5, z: 0}
-  shouldRotateObjects: 0
-  rotateObjectsHandler: {fileID: 0}
-  rotateObjectsDegree: {x: 90, y: 0, z: 0}
-  rotationObjectsSpeed: 1
-  shouldRotateScene: 0
-  rotateSceneHandler: {fileID: 1143007919}
-  rotateSceneDegree: {x: 0, y: 0, z: 90}
-  rotationSceneSpeed: 0.5
 --- !u!212 &1930381080 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 803594834993283775, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
@@ -4225,7 +4338,7 @@ PrefabInstance:
     - target: {fileID: 1436968600749768932, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
       propertyPath: m_Material
       value: 
-      objectReference: {fileID: 13400000, guid: 576259743ef79ff40bf1d1ab6c317eb1, type: 2}
+      objectReference: {fileID: 13400000, guid: 509f31f7d6c44484580d0d984b45e7da, type: 2}
     - target: {fileID: 1730535915263192180, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
       propertyPath: m_Material
       value: 
@@ -4328,7 +4441,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7647982403210810578, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
       propertyPath: m_ActionEvents.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7647982403210810578, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
       propertyPath: m_NeverAutoSwitchControlSchemes
@@ -4355,11 +4468,19 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7647982403210810578, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7647982403210810578, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
       propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1274693894}
     - target: {fileID: 7647982403210810578, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
       propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1274693894}
+    - target: {fileID: 7647982403210810578, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1274693894}
     - target: {fileID: 7647982403210810578, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
@@ -4375,6 +4496,10 @@ PrefabInstance:
       value: OnInteract
       objectReference: {fileID: 0}
     - target: {fileID: 7647982403210810578, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnRestart
+      objectReference: {fileID: 0}
+    - target: {fileID: 7647982403210810578, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
       propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: PlayerInputHandler, Assembly-CSharp
       objectReference: {fileID: 0}
@@ -4383,11 +4508,19 @@ PrefabInstance:
       value: PlayerInputHandler, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7647982403210810578, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PlayerInputHandler, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7647982403210810578, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
       propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7647982403210810578, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
       propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7647982403210810578, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8670333900431808308, guid: 0be055794122090448c3cea1bb7e7669, type: 3}
