@@ -4,7 +4,7 @@ namespace Player.StateMachinePattern.States
 {
     public class PlayerFallState : PlayerBaseState
     {
-        private readonly int FallHash = Animator.StringToHash("Fall");
+        private readonly int _fallHash = Animator.StringToHash("Fall");
 
         public PlayerFallState(PlayerStateMachine stateMachine, Player player, PlayerData playerData) : base(stateMachine, player, playerData)
         {
@@ -16,7 +16,7 @@ namespace Player.StateMachinePattern.States
             
             Player.ChangePhysicMaterial(Player.SlipperMaterial);
             
-            Player.PlayerAnimator.SetBool(FallHash, true);
+            Player.PlayerAnimator.SetBool(_fallHash, true);
             
             Player.AddVelocityY(PlayerData.fallingGravityScale);
         }
@@ -41,7 +41,7 @@ namespace Player.StateMachinePattern.States
 
         public override void Exit()
         {
-            Player.PlayerAnimator.SetBool(FallHash, false);
+            Player.PlayerAnimator.SetBool(_fallHash, false);
         }
     }
 }

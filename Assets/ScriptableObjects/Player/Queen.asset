@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: Queen
   m_EditorClassIdentifier: 
   moveSpeed: 6.5
+  defaultMoveSpeed: 6.5
   jumpForce: 9.5
+  defaultJumpForce: 9.5
   amountOfJumps: 1
+  defaultAmountOfJumps: 1
   coyoteTime: 0.3
   jumpMultiplier: 0.5
   softJumpMultiplier: 0.6

@@ -1,110 +1,76 @@
 using System.Collections;
-using Environment.Interactable;
+using Environment.Interactable.Abstraction;
 using UnityEngine;
 
-public class RotatableObject : Changeable
+namespace Environment
 {
-    [SerializeField] private bool rotateAtStart;
-    [SerializeField] private bool rotateBack;
-    [SerializeField] private bool isLoop;
-    [SerializeField] private Vector3 currentRotation;
-    [SerializeField] private Vector3 targetRotation;
-    [SerializeField] private AnimationCurve animCurve;
-    [SerializeField] private float rotationDuration;
-    [SerializeField] private float pauseDuration;
-
-    public Vector3 CurrentRotation => currentRotation;
-
-    private void Start()
+    public class RotatableObject : Changeable
     {
-        transform.eulerAngles = currentRotation;
-        if (rotateAtStart)
-            ChangeWith();
-    }
+        [SerializeField] private bool rotateAtStart;
+        [SerializeField] private Vector3 currentRotation;
 
-    public override void Change()
-    {
-        StartCoroutine(BaseSetup());
-    }
-    
-    public override void ChangeWith(Button interactable = null)
-    {
-        /*var startRotation = transform.rotation;
-        var endVector = targetRotation;
-        if (interactable && interactable.useCustomRotation)
+        public Vector3 CurrentRotation => currentRotation;
+
+        private void Start()
         {
-            endVector = interactable.customRotation;
-        }
-        
-        SetupRotation(startRotation, endVector, interactable);*/
-        StartCoroutine(BaseSetup(interactable));
-    }
-
-    /*private void SetupRotation(Quaternion startRotation, Vector3 endVector, Button interactable = null)
-    {
-        //Debug.Log(endVector);
-        //Debug.Log($"before {currentRotation}");
-        currentRotation += endVector;
-        currentRotation.Set(currentRotation.x % 360, currentRotation.y % 360, currentRotation.z % 360);
-        //Debug.Log($"after {currentRotation}");
-        var endRotation = Quaternion.Euler(currentRotation);
-        //Debug.Log($"finish strange result {endRotation.eulerAngles}");
-        StartCoroutine(Rotate(startRotation, endRotation, interactable));
-    }*/
-
-    private IEnumerator BaseSetup(Button interactable = null)
-    {
-        do
-        {
-            var startRotation = transform.rotation;
-            var endVector = targetRotation;
-            if (interactable && interactable.useCustomRotation)
-            {
-                endVector = interactable.customRotation;
-            }
-
-            currentRotation += endVector;
-            currentRotation.Set(currentRotation.x % 360, currentRotation.y % 360, currentRotation.z % 360);
-            var endRotation = Quaternion.Euler(currentRotation);
-            yield return Rotate(startRotation, endRotation, interactable);
-
-            yield return new WaitForSeconds(pauseDuration);
-            
-        } while (isLoop);
-    }
-
-    private IEnumerator Rotate(Quaternion startRotation, Quaternion endRotation, Button interactable = null)
-    {
-        IsChanging = true;
-        float timeElapsed = 0;
-
-        while (timeElapsed < rotationDuration)
-        {
-            float t = timeElapsed / rotationDuration;
-
-            t = animCurve.Evaluate(t);
-
-            transform.rotation = Quaternion.Lerp(startRotation, endRotation, t);
-            timeElapsed += Time.deltaTime;
-
-            yield return null;
+            transform.eulerAngles = currentRotation;
+            if (rotateAtStart)
+                ChangeWith(changeableData);
         }
 
-        transform.rotation = endRotation;
-        if (rotateBack)
+        public override void Change()
         {
-            if (interactable && interactable.useCustomRotation)
-            {
-                interactable.customRotation = -interactable.customRotation;
-            }
-            else
-            {
-                targetRotation = -targetRotation;
-            }
+            StartCoroutine(BaseSetup(changeableData));
         }
 
-        IsChanging = isLoop;
+        public override void ChangeWith(ChangeableData data = null)
+        {
+            StartCoroutine(BaseSetup(data ?? changeableData));
+        }
+
+        private IEnumerator BaseSetup(ChangeableData data)
+        {
+            do
+            {
+                var startRotation = transform.rotation;
+                var endVector = data.targetRotation;
+
+                currentRotation += endVector;
+                currentRotation.Set(currentRotation.x % 360, currentRotation.y % 360, currentRotation.z % 360);
+                var endRotation = Quaternion.Euler(currentRotation);
+                yield return Rotate(startRotation, endRotation, data);
+
+                yield return new WaitForSeconds(data.pauseDuration);
+
+            } while (data.isLoop);
+        }
+
+        private IEnumerator Rotate(Quaternion startRotation, Quaternion endRotation, ChangeableData data)
+        {
+            IsChanging = true;
+            float timeElapsed = 0;
+
+            while (timeElapsed < data.duration)
+            {
+                float t = timeElapsed / data.duration;
+
+                t = data.animCurve.Evaluate(t);
+
+                transform.rotation = Quaternion.Lerp(startRotation, endRotation, t);
+                timeElapsed += Time.deltaTime;
+
+                yield return null;
+            }
+
+            transform.rotation = endRotation;
+            if (data.changeBack)
+            {
+                data.targetRotation = -data.targetRotation;
+            }
+
+            IsChanging = data.isLoop;
+        }
+
+        public void TurnLoop(bool loop) => changeableData.isLoop = loop;
     }
-    
-    public void TurnLoop(bool loop) => isLoop = loop;
 }

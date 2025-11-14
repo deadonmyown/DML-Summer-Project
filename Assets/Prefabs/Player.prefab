@@ -250,6 +250,7 @@ GameObject:
   - component: {fileID: 803594834993283775}
   - component: {fileID: 5986428809211389891}
   - component: {fileID: 7819422318065439997}
+  - component: {fileID: 4472658130249540075}
   - component: {fileID: 7647982403210810578}
   m_Layer: 7
   m_Name: Player
@@ -436,7 +437,21 @@ MonoBehaviour:
   interactorCheckRadius: 1
   interactorMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 1536
+--- !u!114 &4472658130249540075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8670333900431808308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07ded72a6cb7f7d478accf92ced39f59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startCamera: {fileID: 0}
+  startVolume: {fileID: 0}
 --- !u!114 &7647982403210810578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -542,6 +557,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 4de426a3-626d-4663-a228-f330d1d3f43f
     m_ActionName: Main/Restart[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5256505025798983644}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnNextDialogue
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 242a8a58-4bf0-4af5-a9b0-422a75870925
+    m_ActionName: Dialogue/NextDialogue[/Keyboard/e]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard and Mouse
   m_DefaultActionMap: Main

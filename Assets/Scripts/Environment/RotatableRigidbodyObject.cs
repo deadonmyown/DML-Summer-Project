@@ -1,99 +1,82 @@
 using System.Collections;
-using Environment.Interactable;
+using Environment.Interactable.Abstraction;
 using UnityEngine;
 
 
-[RequireComponent(typeof(Rigidbody))]
-public class RotatableRigidbodyObject : Changeable
+namespace Environment
 {
-    [SerializeField] private bool rotateAtStart;
-    [SerializeField] private bool rotateBack;
-    [SerializeField] private bool isLoop;
-    [SerializeField] private Vector3 currentRotation;
-    [SerializeField] private Vector3 targetRotation;
-    [SerializeField] private AnimationCurve animCurve;
-    [SerializeField] private float rotationDuration;
-    [SerializeField] private float pauseDuration;
-
-    public Vector3 CurrentRotation => currentRotation;
-
-    [SerializeField] private Rigidbody objectRigidbody;
-    
-    private void Start()
+    [RequireComponent(typeof(Rigidbody))]
+    public class RotatableRigidbodyObject : Changeable
     {
-        var objectTransform = transform;
-        objectTransform.eulerAngles = currentRotation;
-        objectRigidbody.rotation = objectTransform.rotation;
-        if (rotateAtStart)
-            ChangeWith();
-    }
+        [SerializeField] private bool rotateAtStart;
+        [SerializeField] private Vector3 currentRotation;
 
-    public override void Change()
-    {
-        StartCoroutine(BaseSetup());
-    }
-    
-    public override void ChangeWith(Button interactable = null)
-    {
-        
-        StartCoroutine(BaseSetup(interactable));
-    }
+        public Vector3 CurrentRotation => currentRotation;
 
-    
+        [SerializeField] private Rigidbody objectRigidbody;
 
-    private IEnumerator BaseSetup(Button interactable = null)
-    {
-        do
+        private void Start()
         {
-            var startRotation = objectRigidbody.rotation;
-            var endVector = targetRotation;
-            if (interactable && interactable.useCustomRotation)
-            {
-                endVector = interactable.customRotation;
-            }
-
-            currentRotation += endVector;
-            currentRotation.Set(currentRotation.x % 360, currentRotation.y % 360, currentRotation.z % 360);
-            var endRotation = Quaternion.Euler(currentRotation);
-            yield return Rotate(startRotation, endRotation, interactable);
-
-            yield return new WaitForSeconds(pauseDuration);
-            
-        } while (isLoop);
-    }
-
-    private IEnumerator Rotate(Quaternion startRotation, Quaternion endRotation, Button interactable = null)
-    {
-        IsChanging = true;
-        float timeElapsed = 0;
-
-        while (timeElapsed < rotationDuration)
-        {
-            float t = timeElapsed / rotationDuration;
-
-            t = animCurve.Evaluate(t);
-
-            objectRigidbody.MoveRotation(Quaternion.Lerp(startRotation, endRotation, t));
-            timeElapsed += Time.deltaTime;
-
-            yield return null;
+            var objectTransform = transform;
+            objectTransform.eulerAngles = currentRotation;
+            objectRigidbody.rotation = objectTransform.rotation;
+            if (rotateAtStart)
+                ChangeWith(changeableData);
         }
 
-        objectRigidbody.rotation = endRotation;
-        if (rotateBack)
+        public override void Change()
         {
-            if (interactable && interactable.useCustomRotation)
-            {
-                interactable.customRotation = -interactable.customRotation;
-            }
-            else
-            {
-                targetRotation = -targetRotation;
-            }
+            StartCoroutine(BaseSetup(changeableData));
         }
 
-        IsChanging = isLoop;
+        public override void ChangeWith(ChangeableData data = null)
+        {
+            StartCoroutine(BaseSetup(data ?? changeableData));
+        }
+
+        private IEnumerator BaseSetup(ChangeableData data)
+        {
+            do
+            {
+                var startRotation = objectRigidbody.rotation;
+                var endVector = data.targetRotation;
+
+                currentRotation += endVector;
+                currentRotation.Set(currentRotation.x % 360, currentRotation.y % 360, currentRotation.z % 360);
+                var endRotation = Quaternion.Euler(currentRotation);
+                yield return Rotate(startRotation, endRotation, data);
+
+                yield return new WaitForSeconds(data.pauseDuration);
+
+            } while (data.isLoop);
+        }
+
+        private IEnumerator Rotate(Quaternion startRotation, Quaternion endRotation, ChangeableData data)
+        {
+            IsChanging = true;
+            float timeElapsed = 0;
+
+            while (timeElapsed < data.duration)
+            {
+                float t = timeElapsed / data.duration;
+
+                t = data.animCurve.Evaluate(t);
+
+                objectRigidbody.MoveRotation(Quaternion.Lerp(startRotation, endRotation, t));
+                timeElapsed += Time.deltaTime;
+
+                yield return null;
+            }
+
+            objectRigidbody.rotation = endRotation;
+            if (data.changeBack)
+            {
+                data.targetRotation = -data.targetRotation;
+            }
+
+            IsChanging = data.isLoop;
+        }
+
+        public void TurnLoop(bool loop) => changeableData.isLoop = loop;
     }
-    
-    public void TurnLoop(bool loop) => isLoop = loop;
 }

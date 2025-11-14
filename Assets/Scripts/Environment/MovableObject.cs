@@ -1,125 +1,96 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Environment.Interactable;
+using Environment;
+using Environment.Interactable.Abstraction;
 using Player;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class MovableObject : Changeable
+namespace Environment
 {
-    [SerializeField] private bool moveAtStart;
-    [SerializeField] private bool moveBack;
-    [SerializeField] private bool isLoop;
-    private Vector3 _currentPosition;
-    [SerializeField] private Vector3 targetPosition;
-    [SerializeField] private AnimationCurve animCurve;
-    [SerializeField] private float moveDuration;
-    [SerializeField] private float pauseDuration;
-    
-    public Vector3 CurrentPosition => _currentPosition;
-    
-    private void Start()
+    public class MovableObject : Changeable
     {
-        _currentPosition = transform.localPosition;
-        
-        if (moveAtStart)
-            ChangeWith();
-    }
+        [SerializeField] private bool moveAtStart;
 
+        private Vector3 _currentPosition;
 
-    public override void Change()
-    {
-        StartCoroutine(BaseSetup());
-    }
-    
-    public override void ChangeWith(Button interactable = null)
-    {
-        /*var startPosition = transform.localPosition;
-        var addPosition = targetPosition;
-        if (interactable && interactable.useCustomPosition)
+        public Vector3 CurrentPosition => _currentPosition;
+
+        private void Start()
         {
-            addPosition = interactable.customPosition;
-        }
-        
-        SetupMovement(startPosition, addPosition, interactable);*/
-        StartCoroutine(BaseSetup(interactable));
-    }
+            _currentPosition = transform.localPosition;
 
-    private IEnumerator BaseSetup(Button interactable = null)
-    {
-        do
-        {
-            var startPosition = transform.localPosition;
-            var addPosition = targetPosition;
-            if (interactable && interactable.useCustomPosition)
-            {
-                addPosition = interactable.customPosition;
-            }
-
-            var endPosition = startPosition + addPosition;
-            _currentPosition = endPosition;
-            yield return Move(startPosition, endPosition, interactable);
-
-            yield return new WaitForSeconds(pauseDuration);
-            
-        } while (isLoop);
-    }
-
-    /*private IEnumerator SetupMovement(Vector3 startPosition, Vector3 addPosition, Button interactable = null)
-    {
-        var endPosition = startPosition + addPosition;
-        yield return Move(startPosition, endPosition, interactable);
-    }*/
-    
-    private IEnumerator Move(Vector3 startPosition, Vector3 endPosition, Button interactable = null)
-    {
-        IsChanging = true;
-        float timeElapsed = 0;
-
-        while (timeElapsed < moveDuration)
-        {
-            float t = timeElapsed / moveDuration;
-
-            t = animCurve.Evaluate(t);
-
-            transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
-            timeElapsed += Time.fixedDeltaTime;
-
-            yield return new WaitForFixedUpdate();
+            if (moveAtStart)
+                ChangeWith(changeableData);
         }
 
-        transform.localPosition = endPosition;
-        if (moveBack)
+
+        public override void Change()
         {
-            if (interactable && interactable.useCustomPosition)
+            StartCoroutine(BaseSetup(changeableData));
+        }
+
+        public override void ChangeWith(ChangeableData data = null)
+        {
+            StartCoroutine(BaseSetup(data ?? changeableData));
+        }
+
+        private IEnumerator BaseSetup(ChangeableData data)
+        {
+            do
             {
-                interactable.customPosition = -interactable.customPosition;
+                var startPosition = transform.localPosition;
+                var addPosition = data.targetPosition;
+
+                var endPosition = startPosition + addPosition;
+                _currentPosition = endPosition;
+                yield return Move(startPosition, endPosition, data);
+
+                yield return new WaitForSeconds(data.pauseDuration);
+
+            } while (data.isLoop);
+        }
+
+        private IEnumerator Move(Vector3 startPosition, Vector3 endPosition, ChangeableData data)
+        {
+            IsChanging = true;
+            float timeElapsed = 0;
+
+            while (timeElapsed < data.duration)
+            {
+                float t = timeElapsed / data.duration;
+
+                t = data.animCurve.Evaluate(t);
+
+                transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
+                timeElapsed += Time.fixedDeltaTime;
+
+                yield return new WaitForFixedUpdate();
             }
-            else
+
+            transform.localPosition = endPosition;
+            if (data.changeBack)
             {
-                targetPosition = -targetPosition;
+                data.targetPosition = -data.targetPosition;
+            }
+
+            IsChanging = data.isLoop;
+        }
+
+        public void TurnLoop(bool loop) => changeableData.isLoop = loop;
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("PlayerMesh"))
+            {
+                other.gameObject.transform.parent.parent = transform;
             }
         }
 
-        IsChanging = isLoop;
-    }
-
-    public void TurnLoop(bool loop) => isLoop = loop;
-    
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("PlayerMesh"))
+        private void OnTriggerExit(Collider other)
         {
-            other.gameObject.transform.parent.parent = transform;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("PlayerMesh"))
-        {
-            other.gameObject.transform.parent.parent = PlayerManager.Instance.transform;
+            if (other.CompareTag("PlayerMesh"))
+            {
+                other.gameObject.transform.parent.parent = PlayerManager.Instance.transform;
+            }
         }
     }
 }

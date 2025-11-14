@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Environment.Interactable.Abstraction;
 using UnityEngine;
 
 namespace Environment.Interactable
@@ -16,13 +16,13 @@ namespace Environment.Interactable
             }
         }
 
-        public bool TryChangeWith(Button interactable = null)
+        public bool TryChangeWith(ChangeableData data = null)
         {
             if (!CheckOnChanging())
             {
                 for (int i = 0; i < _changeableCount; i++)
                 {
-                    changeables[i].ChangeWith(interactable);
+                    changeables[i].ChangeWith(data);
                 }
 
                 return true;
@@ -31,11 +31,11 @@ namespace Environment.Interactable
             return false;
         }
 
-        public void ChangeWith(Button interactable = null)
+        public void ChangeWith(ChangeableData data = null)
         {
             for (int i = 0; i < _changeableCount; i++)
             {
-                changeables[i].ChangeWith(interactable);
+                changeables[i].ChangeWith(data);
             }
         }
 

@@ -4,7 +4,7 @@ namespace Player.StateMachinePattern.States
 {
     public class PlayerInAirUpState : PlayerBaseState
     {
-        private readonly int JumpHash = Animator.StringToHash("Jump");
+        private readonly int _jumpHash = Animator.StringToHash("Jump");
         
         public PlayerInAirUpState(PlayerStateMachine stateMachine, Player player, PlayerData playerData) : base(stateMachine, player, playerData)
         {
@@ -19,7 +19,7 @@ namespace Player.StateMachinePattern.States
             
             Player.JumpState.DecreaseAmountOfJumpsLeft();
             
-            Player.PlayerAnimator.SetBool(JumpHash, true);
+            Player.PlayerAnimator.SetBool(_jumpHash, true);
             
         }
 
@@ -49,7 +49,7 @@ namespace Player.StateMachinePattern.States
 
         public override void Exit()
         {
-            Player.PlayerAnimator.SetBool(JumpHash, false);
+            Player.PlayerAnimator.SetBool(_jumpHash, false);
         }
     }
 }

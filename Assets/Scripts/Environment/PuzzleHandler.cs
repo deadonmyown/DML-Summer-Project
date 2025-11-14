@@ -1,4 +1,4 @@
-﻿using Environment.Interactable;
+﻿using Environment.Interactable.Abstraction;
 using UnityEngine;
 using UnityEngine.Events;
 

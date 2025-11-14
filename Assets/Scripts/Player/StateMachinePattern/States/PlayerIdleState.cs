@@ -4,7 +4,7 @@ namespace Player.StateMachinePattern.States
 {
     public class PlayerIdleState : PlayerBaseState
     {
-        private readonly int IdleHash = Animator.StringToHash("Idle");
+        private readonly int _idleHash = Animator.StringToHash("Idle");
         
         public PlayerIdleState(PlayerStateMachine stateMachine, Player player, PlayerData playerData) : base(stateMachine, player, playerData)
         {
@@ -19,7 +19,7 @@ namespace Player.StateMachinePattern.States
             //Player.ResetVelocity();
             Player.JumpState.ResetAmountOfJumpsLeft();
 
-            Player.PlayerAnimator.SetBool(IdleHash, true);
+            Player.PlayerAnimator.SetBool(_idleHash, true);
         }
 
         public override void Tick()
@@ -51,7 +51,7 @@ namespace Player.StateMachinePattern.States
 
         public override void Exit()
         {
-            Player.PlayerAnimator.SetBool(IdleHash, false);
+            Player.PlayerAnimator.SetBool(_idleHash, false);
         }
     }
 }

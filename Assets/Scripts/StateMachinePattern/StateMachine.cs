@@ -1,11 +1,14 @@
-public abstract class StateMachine
+namespace StateMachinePattern
 {
-    public State CurrentState { get; private set; }
-
-    public void SwitchState(State newState)
+    public abstract class StateMachine
     {
-        CurrentState?.Exit();
-        CurrentState = newState;
-        CurrentState.Enter();
+        public State CurrentState { get; private set; }
+
+        public void SwitchState(State newState)
+        {
+            CurrentState?.Exit();
+            CurrentState = newState;
+            CurrentState.Enter();
+        }
     }
 }

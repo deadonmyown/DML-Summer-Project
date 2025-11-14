@@ -1,13 +1,16 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class DeathTrigger : MonoBehaviour
+namespace Environment
 {
-    private void OnTriggerEnter(Collider other)
+    public class DeathTrigger : MonoBehaviour
     {
-        if (other.CompareTag("PlayerMesh"))
+        private void OnTriggerEnter(Collider other)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            if (other.CompareTag("PlayerMesh"))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
         }
     }
 }

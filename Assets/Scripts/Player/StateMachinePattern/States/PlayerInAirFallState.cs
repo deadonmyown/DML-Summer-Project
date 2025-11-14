@@ -4,8 +4,8 @@ namespace Player.StateMachinePattern.States
 {
     public class PlayerInAirFallState : PlayerBaseState
     {
-        private readonly int FallHash = Animator.StringToHash("Fall");
-        private bool coyoteTime;
+        private readonly int _fallHash = Animator.StringToHash("Fall");
+        private bool _coyoteTime;
         
         public PlayerInAirFallState(PlayerStateMachine stateMachine, Player player, PlayerData playerData) : base(stateMachine, player, playerData)
         {
@@ -16,11 +16,11 @@ namespace Player.StateMachinePattern.States
             base.Enter();
             //Debug.Log("Enter In Air FALL State");
             
-            coyoteTime = true;
+            _coyoteTime = true;
             
             Player.ChangePhysicMaterial(Player.SlipperMaterial);
             
-            Player.PlayerAnimator.SetBool(FallHash, true);
+            Player.PlayerAnimator.SetBool(_fallHash, true);
             
             //Player.AddVelocityY(PlayerData.fallingGravityScale);
         }
@@ -32,7 +32,7 @@ namespace Player.StateMachinePattern.States
             var inputX = Player.InputHandler.MovementInputX;
             var inputY = Player.InputHandler.MovementInputY;
 
-            if (Player.InputHandler.JumpInput && Player.JumpState.CanJump() && coyoteTime)
+            if (Player.InputHandler.JumpInput && Player.JumpState.CanJump() && _coyoteTime)
             {
                 StateMachine.SwitchState(Player.JumpState);
             }
@@ -47,7 +47,7 @@ namespace Player.StateMachinePattern.States
 
         public override void Exit()
         {
-            Player.PlayerAnimator.SetBool(FallHash, false);
+            Player.PlayerAnimator.SetBool(_fallHash, false);
         }
 
         private void CheckCoyoteTime()
@@ -55,7 +55,7 @@ namespace Player.StateMachinePattern.States
             if (Time.time > StartTime + PlayerData.coyoteTime)
             {
                 //Debug.Log("Coyote time left");
-                coyoteTime = false;
+                _coyoteTime = false;
                 Player.JumpState.DecreaseAmountOfJumpsLeft();
             }
         }

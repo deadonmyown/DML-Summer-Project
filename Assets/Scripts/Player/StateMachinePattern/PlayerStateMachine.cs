@@ -1,6 +1,4 @@
-﻿using System;
-using Player.StateMachinePattern.States;
-using UnityEngine;
+﻿using StateMachinePattern;
 
 namespace Player.StateMachinePattern
 {

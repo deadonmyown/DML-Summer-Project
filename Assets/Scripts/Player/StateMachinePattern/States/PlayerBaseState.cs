@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using StateMachinePattern;
 
 namespace Player.StateMachinePattern.States
 {

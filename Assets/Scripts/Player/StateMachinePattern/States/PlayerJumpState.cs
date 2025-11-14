@@ -4,7 +4,7 @@ namespace Player.StateMachinePattern.States
 {
     public class PlayerJumpState : PlayerBaseState
     {
-        private readonly int JumpHash = Animator.StringToHash("Jump");
+        private readonly int _jumpHash = Animator.StringToHash("Jump");
         private int _amountOfJumpsLeft;
         
         public PlayerJumpState(PlayerStateMachine stateMachine, Player player, PlayerData playerData) : base(stateMachine, player, playerData)
@@ -20,8 +20,9 @@ namespace Player.StateMachinePattern.States
             
             Player.SetVelocityY(PlayerData.jumpForce);
             _amountOfJumpsLeft--;
+            Player.InputHandler.StopJump();
 
-            Player.PlayerAnimator.SetBool(JumpHash, true);
+            Player.PlayerAnimator.SetBool(_jumpHash, true);
         }
 
         public override void Tick()
@@ -33,8 +34,13 @@ namespace Player.StateMachinePattern.States
 
             var inputX = Player.InputHandler.MovementInputX;
             var inputY = Player.InputHandler.MovementInputY;
-            
-            if (velocity <= 0f)
+            if (Player.InputHandler.JumpInput && CanJump())
+            {
+                Player.SetVelocityY(PlayerData.jumpForce);
+                _amountOfJumpsLeft--;
+                Player.InputHandler.StopJump();
+            }
+            else if (velocity <= 0f)
             {
                 StateMachine.SwitchState(Player.FallState);
             }
@@ -45,7 +51,7 @@ namespace Player.StateMachinePattern.States
 
         public override void Exit()
         {
-            Player.PlayerAnimator.SetBool(JumpHash, false);
+            Player.PlayerAnimator.SetBool(_jumpHash, false);
         }
         
         public bool CanJump() => _amountOfJumpsLeft > 0 ? true : false;
@@ -64,7 +70,7 @@ namespace Player.StateMachinePattern.States
 
         private void CheckEndJumpInput()
         {
-            if (!Player.InputHandler.JumpInput)
+            if (!Player.InputHandler.JumpInputStart)
             {
                 Player.SetVelocityY(Player.Velocity.y * PlayerData.softJumpMultiplier);
             }

@@ -4,7 +4,7 @@ namespace Player.StateMachinePattern.States
 {
     public class PlayerMoveState : PlayerBaseState
     {
-        private readonly int MoveHash = Animator.StringToHash("Move");
+        private readonly int _moveHash = Animator.StringToHash("Move");
         
         public PlayerMoveState(PlayerStateMachine stateMachine, Player player, PlayerData playerData) : base(stateMachine, player, playerData)
         {
@@ -18,7 +18,7 @@ namespace Player.StateMachinePattern.States
             
             Player.JumpState.ResetAmountOfJumpsLeft();
             
-            Player.PlayerAnimator.SetBool(MoveHash, true);
+            Player.PlayerAnimator.SetBool(_moveHash, true);
         }
 
         public override void Tick()
@@ -57,7 +57,7 @@ namespace Player.StateMachinePattern.States
 
         public override void Exit()
         {
-            Player.PlayerAnimator.SetBool(MoveHash, false);
+            Player.PlayerAnimator.SetBool(_moveHash, false);
         }
     }
 }

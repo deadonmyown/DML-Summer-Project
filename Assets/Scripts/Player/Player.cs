@@ -1,7 +1,12 @@
-﻿using Player.StateMachinePattern;
+﻿using System;
+using System.Collections;
+using Player.StateMachinePattern;
 using Player.StateMachinePattern.States;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
+using Cameras;
 
 namespace Player
 {
@@ -22,6 +27,7 @@ namespace Player
         public Animator PlayerAnimator { get; private set; }
         public Rigidbody PlayerRB { get; private set; }
         public Interactor Interactor { get; private set; }
+        public CameraHandler CameraHandler { get; private set; }
         public Vector3 Velocity { get; private set; }
 
         private Vector3 _temporaryVelocity;
@@ -30,6 +36,8 @@ namespace Player
 
         
         [SerializeField] private PlayerData playerData;
+
+        public PlayerData PlayerData => playerData;
 
         [SerializeField] private Transform groundCheckPosition;
         [SerializeField] private float groundCheckRadius;
@@ -45,12 +53,19 @@ namespace Player
         public PhysicMaterial DefaultMaterial => defaultMaterial;
         public PhysicMaterial SlipperMaterial => slipperMaterial;
 
+        public PlayerInput PlayerInput { get; private set; }
+
+        private int _health;
+
         private void Awake()
         {
             InputHandler = GetComponent<PlayerInputHandler>();
             PlayerAnimator = GetComponent<Animator>();
             PlayerRB = GetComponent<Rigidbody>();
             Interactor = GetComponent<Interactor>();
+            CameraHandler = GetComponent<CameraHandler>();
+
+            PlayerInput = GetComponent<PlayerInput>();
 
             StateMachine = new PlayerStateMachine();
 
@@ -68,22 +83,30 @@ namespace Player
             playerSprite.shadowCastingMode = ShadowCastingMode.On;
             playerSprite.receiveShadows = true;
             FacingDirection = 1;
+
+            _health = playerData.health;
         }
 
         private void Update()
         {
             Velocity = PlayerRB.velocity;
             StateMachine.CurrentState?.Tick();
-            if (InputHandler.IsInteract)
+            /*if (InputHandler.IsInteract)
             {
                 Interactor.TryInteract();
-            }
+            }*/
         }
 
         public void ChangePhysicMaterial(PhysicMaterial physicMaterial)
         {
             playerCollider.material = physicMaterial;
             playerHeadCollider.material = physicMaterial;
+        }
+
+        public void SetVelocity(Vector3 velocity)
+        {
+            _temporaryVelocity = velocity;
+            SetCalculatedVelocity();
         }
         
         public void SetVelocityXZ(Vector2 input, float speed)
@@ -150,6 +173,40 @@ namespace Player
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(groundCheckPosition.position, groundCheckRadius);
         }
-        
+
+
+        public void TurnPlayerScripts(bool turn)
+        {
+            PlayerInput.enabled = turn;
+            Interactor.enabled = turn;
+            Interactor.TurnInteractor(turn);
+        }
+
+        public void GetDamage(int damage)
+        {
+            _health -= damage;
+            if (_health <= 0)
+            {
+                Die();
+            }
+        }
+
+        public IEnumerator GetDamageForce(Vector3 enemyPosition, float damageForce, float yForce, float stunTime)
+        {
+            PlayerInput.SwitchCurrentActionMap("Stun");
+            ResetVelocity();
+            Vector3 normal = (transform.position - enemyPosition).normalized;
+            Vector3 force = new Vector3(damageForce * normal.x, yForce,
+                damageForce * normal.z);
+            SetVelocity(force);
+            //Debug.Log(force);
+            yield return new WaitForSeconds(stunTime);
+            PlayerInput.SwitchCurrentActionMap("Main");
+        }
+
+        private void Die()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }
