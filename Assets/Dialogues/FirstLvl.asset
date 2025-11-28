@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5640ef9910a48cb895a77ae1cefada4, type: 3}
+  m_Name: FirstLvl
+  m_EditorClassIdentifier: 
+  dialogues:
+  - characterProfile: {fileID: 11400000, guid: 9f63b4522741a914ba828a9078a05c73, type: 2}
+    text: Mewo-mewo0meow???
+  - characterProfile: {fileID: 11400000, guid: 8928d6994de4dc7448b39d493b88371b, type: 2}
+    text: bark-bark-bark
